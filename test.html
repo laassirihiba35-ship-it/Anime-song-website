@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Anime Song Collection | By Hiba Laassiri</title>
   <meta name="description" content="Discover the best openings and endings from your favorite anime series">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -17,6 +18,7 @@
       --gray: #777;
       --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
       --hover-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+      --modal-bg: rgba(0, 0, 0, 0.7);
     }
 
     * {
@@ -31,6 +33,31 @@
       color: var(--dark);
       line-height: 1.6;
       min-height: 100vh;
+      transition: background 0.3s ease;
+    }
+
+    body.dark-mode {
+      --dark: #f0f0f0;
+      --light: #1a1a1a;
+      --gray: #aaa;
+      background: linear-gradient(135deg, #1a1a1a 0%, #2a2a3a 100%);
+      color: var(--dark);
+    }
+
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: var(--primary);
+      color: white;
+      padding: 8px;
+      z-index: 10000;
+      text-decoration: none;
+      border-radius: 0 0 4px 0;
+    }
+
+    .skip-link:focus {
+      top: 0;
     }
 
     header {
@@ -106,6 +133,11 @@
       transition: all 0.3s ease;
     }
 
+    .dark-mode .search-box input {
+      background: #2a2a2a;
+      color: white;
+    }
+
     .search-box input:focus {
       outline: none;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
@@ -137,6 +169,11 @@
       box-shadow: var(--card-shadow);
     }
 
+    .dark-mode .filter-btn {
+      background: #2a2a2a;
+      color: white;
+    }
+
     .filter-btn:hover {
       background: var(--primary);
       color: white;
@@ -144,6 +181,46 @@
 
     .filter-btn.active {
       background: var(--primary);
+      color: white;
+    }
+
+    .sort-options {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sort-select {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 50px;
+      background: white;
+      box-shadow: var(--card-shadow);
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .dark-mode .sort-select {
+      background: #2a2a2a;
+      color: white;
+    }
+
+    .theme-toggle {
+      background: white;
+      border: none;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: var(--card-shadow);
+      transition: all 0.3s ease;
+    }
+
+    .dark-mode .theme-toggle {
+      background: #2a2a2a;
       color: white;
     }
 
@@ -164,6 +241,10 @@
       transition: all 0.4s ease;
       position: relative;
       overflow: hidden;
+    }
+
+    .dark-mode .card {
+      background: #2a2a2a;
     }
 
     .card:hover {
@@ -194,6 +275,11 @@
       justify-content: center;
       color: #999;
       font-size: 0.9rem;
+    }
+
+    .dark-mode .card-img {
+      background-color: #3a3a3a;
+      color: #aaa;
     }
 
     .card:hover .card-img {
@@ -261,6 +347,13 @@
 
     .play-btn.playing {
       background: linear-gradient(to right, var(--secondary), #5a4fd8);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
     }
 
     .like-btn {
@@ -281,6 +374,24 @@
       color: var(--primary);
     }
 
+    .queue-btn {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      color: #ddd;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      padding: 5px;
+    }
+
+    .queue-btn:hover {
+      color: var(--secondary);
+    }
+
+    .queue-btn.queued {
+      color: var(--secondary);
+    }
+
     /* Audio Player Styles */
     .audio-player {
       position: fixed;
@@ -288,7 +399,7 @@
       left: 50%;
       transform: translateX(-50%);
       width: 90%;
-      max-width: 500px;
+      max-width: 700px;
       background: white;
       border-radius: 50px;
       box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
@@ -298,6 +409,11 @@
       gap: 15px;
       z-index: 1000;
       transition: all 0.3s ease;
+    }
+
+    .dark-mode .audio-player {
+      background: #2a2a2a;
+      color: white;
     }
 
     .audio-player.hidden {
@@ -331,6 +447,14 @@
       transform: scale(1.1);
     }
 
+    .player-btn.secondary {
+      background: var(--secondary);
+    }
+
+    .player-btn.secondary:hover {
+      background: #5a4fd8;
+    }
+
     .player-info {
       flex: 1;
       overflow: hidden;
@@ -349,7 +473,7 @@
       color: var(--gray);
       white-space: nowrap;
       overflow: hidden;
-        text-overflow: ellipsis;
+      text-overflow: ellipsis;
     }
 
     .progress-container {
@@ -368,6 +492,10 @@
       cursor: pointer;
     }
 
+    .dark-mode .progress-bar {
+      background: #444;
+    }
+
     .progress {
       height: 100%;
       background: linear-gradient(to right, var(--primary), var(--secondary));
@@ -379,6 +507,225 @@
       font-size: 0.8rem;
       color: var(--gray);
       min-width: 40px;
+    }
+
+    .volume-container {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .volume-slider {
+      width: 80px;
+    }
+
+    /* Modal Styles */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--modal-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 30px;
+      position: relative;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .dark-mode .modal-content {
+      background: #2a2a2a;
+      color: white;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--gray);
+    }
+
+    .modal-image {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      max-height: 300px;
+      object-fit: cover;
+    }
+
+    .modal-title {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+
+    .modal-info {
+      margin-bottom: 20px;
+      color: var(--gray);
+    }
+
+    .lyrics-section {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+    }
+
+    .dark-mode .lyrics-section {
+      border-top: 1px solid #444;
+    }
+
+    .lyrics-section h3 {
+      margin-bottom: 10px;
+    }
+
+    .lyrics-content {
+      white-space: pre-line;
+      line-height: 1.8;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    /* Queue Panel */
+    .queue-panel {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 350px;
+      height: 100vh;
+      background: white;
+      box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      overflow-y: auto;
+      transition: right 0.3s ease;
+      z-index: 1500;
+    }
+
+    .dark-mode .queue-panel {
+      background: #2a2a2a;
+      color: white;
+    }
+
+    .queue-panel.active {
+      right: 0;
+    }
+
+    .queue-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .dark-mode .queue-header {
+      border-bottom: 1px solid #444;
+    }
+
+    .queue-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .close-queue {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: var(--gray);
+    }
+
+    .queue-list {
+      list-style: none;
+    }
+
+    .queue-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .queue-item:hover {
+      background: #f5f5f5;
+    }
+
+    .dark-mode .queue-item:hover {
+      background: #3a3a3a;
+    }
+
+    .queue-item.active {
+      background: rgba(106, 90, 249, 0.1);
+    }
+
+    .queue-item-img {
+      width: 40px;
+      height: 40px;
+      border-radius: 5px;
+      object-fit: cover;
+    }
+
+    .queue-item-info {
+      flex: 1;
+    }
+
+    .queue-item-title {
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .queue-item-artist {
+      font-size: 0.8rem;
+      color: var(--gray);
+    }
+
+    .queue-remove {
+      background: none;
+      border: none;
+      color: var(--gray);
+      cursor: pointer;
+    }
+
+    /* Loading Spinner */
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
 
     footer {
@@ -444,6 +791,22 @@
       opacity: 0.8;
     }
 
+    .export-btn {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 20px;
+    }
+
+    .export-btn:hover {
+      background: white;
+      color: var(--primary);
+    }
+
     @media (max-width: 768px) {
       .gallery {
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -470,6 +833,11 @@
 
       .progress-container {
         flex: 1;
+      }
+
+      .queue-panel {
+        width: 100%;
+        right: -100%;
       }
     }
 
@@ -500,10 +868,16 @@
       .progress-container {
         width: 100%;
       }
+
+      .volume-container {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
 
   <header>
     <div class="header-content">
@@ -512,7 +886,7 @@
     </div>
   </header>
 
-  <main>
+  <main id="main-content">
     <div class="controls">
       <div class="search-box">
         <i class="fas fa-search" aria-hidden="true"></i>
@@ -524,6 +898,21 @@
         <button class="filter-btn" data-filter="ending">Endings</button>
         <button class="filter-btn" data-filter="favorite">Favorites</button>
       </div>
+      <div class="sort-options">
+        <label for="sort">Sort by:</label>
+        <select id="sort" class="sort-select">
+          <option value="title">Anime Title</option>
+          <option value="song">Song Name</option>
+          <option value="artist">Artist</option>
+          <option value="year">Release Year</option>
+        </select>
+      </div>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+        <i class="fas fa-moon"></i>
+      </button>
+      <button class="play-btn" id="queue-toggle">
+        <i class="fas fa-list"></i> Queue
+      </button>
     </div>
 
     <section class="gallery" id="gallery" aria-live="polite">
@@ -534,8 +923,14 @@
   <!-- Audio Player -->
   <div class="audio-player hidden" id="audio-player">
     <div class="player-controls">
-      <button class="player-btn" id="play-pause-btn">
+      <button class="player-btn" id="prev-btn" aria-label="Previous song">
+        <i class="fas fa-step-backward"></i>
+      </button>
+      <button class="player-btn" id="play-pause-btn" aria-label="Play/pause">
         <i class="fas fa-play" id="play-pause-icon"></i>
+      </button>
+      <button class="player-btn" id="next-btn" aria-label="Next song">
+        <i class="fas fa-step-forward"></i>
       </button>
     </div>
     <div class="player-info">
@@ -549,6 +944,44 @@
       </div>
       <span class="time" id="duration">0:00</span>
     </div>
+    <div class="player-controls">
+      <button class="player-btn secondary" id="shuffle-btn" aria-label="Shuffle">
+        <i class="fas fa-random"></i>
+      </button>
+      <button class="player-btn secondary" id="repeat-btn" aria-label="Repeat">
+        <i class="fas fa-redo"></i>
+      </button>
+    </div>
+    <div class="volume-container">
+      <i class="fas fa-volume-up"></i>
+      <input type="range" min="0" max="100" value="80" class="volume-slider" id="volume-slider">
+    </div>
+  </div>
+
+  <!-- Song Details Modal -->
+  <div class="modal" id="song-modal">
+    <div class="modal-content">
+      <button class="close-modal" id="close-modal">&times;</button>
+      <img src="" alt="" class="modal-image" id="modal-image">
+      <h2 class="modal-title" id="modal-title"></h2>
+      <div class="modal-info" id="modal-info"></div>
+      <div class="lyrics-section">
+        <h3>Lyrics</h3>
+        <div class="lyrics-content" id="lyrics-content">Lyrics not available for this song.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Queue Panel -->
+  <div class="queue-panel" id="queue-panel">
+    <div class="queue-header">
+      <h3 class="queue-title">Play Queue</h3>
+      <button class="close-queue" id="close-queue">&times;</button>
+    </div>
+    <ul class="queue-list" id="queue-list">
+      <!-- Queue items will be added here -->
+    </ul>
+    <button class="export-btn" id="export-queue">Export Queue</button>
   </div>
 
   <footer>
@@ -576,11 +1009,12 @@
       </div>
       
       <p>Created by Hiba Laassiri | 2025</p>
+      <button class="export-btn" id="export-favorites">Export Favorites</button>
     </div>
   </footer>
 
   <script>
-    // Anime songs data with local image paths
+    // Anime songs data with enhanced information
     const animeSongs = [
       {
         id: 1,
@@ -590,7 +1024,9 @@
         type: "ending",
         image: "images/anime-covers/kamisama.jpg",
         audio: "music/endings/kamisama.mp3",
-        favorite: false
+        year: 2012,
+        favorite: false,
+        lyrics: "Kamisama onegai\nMou ichido dake\nAno hi no you ni waratte hoshii\nYume no naka de mita keshiki wo\nMou ichido mitsuketai"
       },
       {
         id: 2,
@@ -600,7 +1036,9 @@
         type: "opening",
         image: "images/anime-covers/spyxfamily.jpg",
         audio: "music/openings/spyx.mp3",
-        favorite: false
+        year: 2022,
+        favorite: false,
+        lyrics: "Mixed nuts, mixed nuts\nHajimete no kimochi ga\nAfure dashisou de\nMixed nuts, mixed nuts\nKimi to deaeta kiseki\nZutto wasurenai"
       },
       {
         id: 3,
@@ -610,7 +1048,9 @@
         type: "opening",
         image: "images/anime-covers/naruto.jpg",
         audio: "music/openings/naruto.mp3",
-        favorite: false
+        year: 2007,
+        favorite: false,
+        lyrics: "Habataku koto wo yameta hi kara\nNani mo mienaku natte\nSora wo miagete naku no wo\nTomadou dake de"
       },
       {
         id: 4,
@@ -620,7 +1060,9 @@
         type: "opening",
         image: "images/anime-covers/attackontitan.jpg",
         audio: "music/openings/attack.mp3",
-        favorite: false
+        year: 2013,
+        favorite: false,
+        lyrics: "Seid ihr das Essen?\nNein, wir sind der Jäger!\nFeuerroter Pfeil und Bogen\nAngriff auf die Titanen"
       },
       {
         id: 5,
@@ -630,7 +1072,9 @@
         type: "opening",
         image: "images/anime-covers/yourlieinapril.jpg",
         audio: "music/openings/yourlieinapril.mp3",
-        favorite: false
+        year: 2014,
+        favorite: false,
+        lyrics: "Hikaru nara kaze wo tachinokete\nSekai ga sono kao wo\nShinjiteru no nara\nKakeagare bara yori mo kirei ni"
       },
       {
         id: 6,
@@ -640,7 +1084,9 @@
         type: "opening",
         image: "images/anime-covers/demonslayer.jpg",
         audio: "music/openings/demonslayer.mp3",
-        favorite: false
+        year: 2019,
+        favorite: false,
+        lyrics: "Yureru kowagaru\nKodomo-tachi no kokoro ni\nYawaraka ni fureru\nAno koro no you ni"
       },
       {
         id: 7,
@@ -650,7 +1096,9 @@
         type: "opening",
         image: "images/anime-covers/myheroacademia.jpg",
         audio: "music/openings/myheroacademia.mp3",
-        favorite: false
+        year: 2017,
+        favorite: false,
+        lyrics: "Mada minu sekai no dokoka ni\nKitto aru kagayaki wo\nSagashi ni ikou\nBokura wa"
       },
       {
         id: 8,
@@ -660,7 +1108,9 @@
         type: "opening",
         image: "images/anime-covers/onepiece.jpeg",
         audio: "music/openings/onepiece.mp3",
-        favorite: false
+        year: 1999,
+        favorite: false,
+        lyrics: "We are, we are on the cruise!\nWe are!\nGet up! Get up! Get up!\nYume wo oikakete"
       },
       {
         id: 9,
@@ -670,7 +1120,9 @@
         type: "opening",
         image: "images/anime-covers/deathnote.jpg",
         audio: "music/openings/deathnote.mp3",
-        favorite: false
+        year: 2006,
+        favorite: false,
+        lyrics: "I wanna be in the dream\nI wanna be in the world\nI wanna be in the future\nI wanna be in the past"
       },
       {
         id: 10,
@@ -680,107 +1132,9 @@
         type: "opening",
         image: "images/anime-covers/fullmetalalchemist.jpg",
         audio: "music/openings/fullmetal.mp3",
-        favorite: false
-      },
-      {
-        id: 11,
-        title: "Sailor Moon",
-        song: "Moonlight Densetsu",
-        artist: "DALI",
-        type: "opening",
-        image: "images/anime-covers/sailormoon.jpeg",
-        audio: "music/openings/sailormoon.mp3",
-        favorite: false
-      },
-      {
-        id: 12,
-        title: "Tokyo Ghoul",
-        song: "Unravel",
-        artist: "TK from Ling Tosite Sigure",
-        type: "opening",
-        image: "images/anime-covers/tokyoghoul.jpg",
-        audio: "music/openings/tokyoghoul.mp3",
-        favorite: false
-      },
-      {
-        id: 13,
-        title: "Fruits Basket",
-        song: "Again",
-        artist: "Beverly",
-        type: "opening",
-        image: "images/anime-covers/fruitbasket.jpg",
-        audio: "music/openings/fruitbasket.mp3",
-        favorite: false
-      },
-      {
-        id: 14,
-        title: "Jujutsu Kaisen",
-        song: "Kaikai Kitan",
-        artist: "Eve",
-        type: "opening",
-        image: "images/anime-covers/jujutsukaisen.jpeg",
-        audio: "music/openings/jujutsuop.mp3",
-        favorite: false
-      },
-      {
-        id: 15,
-        title: "Haikyuu!!",
-        song: "Imagination",
-        artist: "SPYAIR",
-        type: "opening",
-        image: "images/anime-covers/haikyu.png",
-        audio: "music/openings/haikyuu.mp3",
-        favorite: false
-      },
-      {
-        id: 16,
-        title: "Cowboy Bebop",
-        song: "Tank!",
-        artist: "The Seatbelts",
-        type: "opening",
-        image: "images/anime-covers/cowboybepop.jpg",
-        audio: "music/openings/cowboybebop.mp3",
-        favorite: false
-      },
-      {
-        id: 17,
-        title: "Neon Genesis Evangelion",
-        song: "A Cruel Angel's Thesis",
-        artist: "Yoko Takahashi",
-        type: "opening",
-        image: "images/anime-covers/evangelion.jpg",
-        audio: "music/openings/evanglion.mp3",
-        favorite: false
-      },
-      {
-        id: 18,
-        title: "Hunter x Hunter",
-        song: "Departure!",
-        artist: "Masatoshi Ono",
-        type: "opening",
-        image: "images/anime-covers/hunterxhunter.png",
-        audio: "music/openings/hunterxhunter.mp3",
-        favorite: false
-      },
-      {
-        id: 19,
-        title: "Dragon Ball Z",
-        song: "Cha-La Head-Cha-La",
-        artist: "Hironobu Kageyama",
-        type: "opening",
-        image: "images/anime-covers/dragonballz.jpeg",
-        audio: "music/openings/dragonballz.mp3",
-        favorite: false
-      },
-      {
-        id: 20,
-        title: "One Punch Man",
-        song: "The Hero!!",
-        artist: "JAM Project",
-        type: "opening",
-        image: "images/anime-covers/onepunchman.jpg",
-        audio: "music/openings/onepunchman.mp3",
-        favorite: false
+        year: 2009,
+        favorite: false,
+        lyrics: "I can't say goodbye to you\nEven if I know it's the end\nI'm still standing here\nWith my empty hands"
       }
     ];
 
@@ -788,28 +1142,56 @@
     const gallery = document.getElementById('gallery');
     const searchInput = document.getElementById('search');
     const filterButtons = document.querySelectorAll('.filter-btn');
+    const sortSelect = document.getElementById('sort');
+    const themeToggle = document.getElementById('theme-toggle');
+    const queueToggle = document.getElementById('queue-toggle');
     const totalSongsElement = document.getElementById('total-songs');
     const totalAnimeElement = document.getElementById('total-anime');
     const favoriteCountElement = document.getElementById('favorite-count');
+    const exportFavoritesBtn = document.getElementById('export-favorites');
+    const exportQueueBtn = document.getElementById('export-queue');
 
     // Audio player elements
     const audioPlayer = document.getElementById('audio-player');
     const playPauseBtn = document.getElementById('play-pause-btn');
     const playPauseIcon = document.getElementById('play-pause-icon');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const shuffleBtn = document.getElementById('shuffle-btn');
+    const repeatBtn = document.getElementById('repeat-btn');
     const playerTitle = document.getElementById('player-title');
     const playerArtist = document.getElementById('player-artist');
     const progressBar = document.getElementById('progress-bar');
     const progress = document.getElementById('progress');
     const currentTimeEl = document.getElementById('current-time');
     const durationEl = document.getElementById('duration');
+    const volumeSlider = document.getElementById('volume-slider');
+
+    // Modal elements
+    const songModal = document.getElementById('song-modal');
+    const closeModal = document.getElementById('close-modal');
+    const modalImage = document.getElementById('modal-image');
+    const modalTitle = document.getElementById('modal-title');
+    const modalInfo = document.getElementById('modal-info');
+    const lyricsContent = document.getElementById('lyrics-content');
+
+    // Queue elements
+    const queuePanel = document.getElementById('queue-panel');
+    const closeQueue = document.getElementById('close-queue');
+    const queueList = document.getElementById('queue-list');
 
     // Audio context
     const audio = new Audio();
     let currentSong = null;
     let isPlaying = false;
+    let isShuffled = false;
+    let isRepeating = false;
+    let playQueue = [];
+    let currentQueueIndex = -1;
 
     // Initialize the page
     function init() {
+      loadFavorites();
       displaySongs(animeSongs);
       updateStats();
       
@@ -826,17 +1208,45 @@
         });
       });
 
+      sortSelect.addEventListener('change', filterSongs);
+
+      themeToggle.addEventListener('click', toggleTheme);
+
+      queueToggle.addEventListener('click', toggleQueuePanel);
+      closeQueue.addEventListener('click', toggleQueuePanel);
+
+      exportFavoritesBtn.addEventListener('click', exportFavorites);
+      exportQueueBtn.addEventListener('click', exportQueue);
+
       // Audio player event listeners
       playPauseBtn.addEventListener('click', togglePlayPause);
+      prevBtn.addEventListener('click', playPrevious);
+      nextBtn.addEventListener('click', playNext);
+      shuffleBtn.addEventListener('click', toggleShuffle);
+      repeatBtn.addEventListener('click', toggleRepeat);
       progressBar.addEventListener('click', setProgress);
+      volumeSlider.addEventListener('input', setVolume);
+      
       audio.addEventListener('timeupdate', updateProgress);
       audio.addEventListener('loadedmetadata', () => {
         durationEl.textContent = formatTime(audio.duration);
       });
-      audio.addEventListener('ended', () => {
-        isPlaying = false;
-        playPauseIcon.classList.remove('fa-pause');
-        playPauseIcon.classList.add('fa-play');
+      audio.addEventListener('ended', handleSongEnd);
+      audio.addEventListener('error', handleAudioError);
+
+      // Modal event listeners
+      closeModal.addEventListener('click', () => {
+        songModal.classList.remove('active');
+      });
+
+      // Keyboard shortcuts
+      document.addEventListener('keydown', handleKeyboardShortcuts);
+
+      // Close modals when clicking outside
+      window.addEventListener('click', (e) => {
+        if (e.target === songModal) {
+          songModal.classList.remove('active');
+        }
       });
     }
 
@@ -868,27 +1278,43 @@
           <span class="song-type ${song.type}">${song.type.toUpperCase()}</span>
           <h2>${song.title}</h2>
           <p>${song.type === 'opening' ? 'Opening' : 'Ending'} Song: "${song.song}"${song.artist ? ` by ${song.artist}` : ''}</p>
+          <p><small>Released: ${song.year}</small></p>
           <div class="card-actions">
             <button class="play-btn" data-id="${song.id}" aria-label="Play ${song.song}">
               <i class="fas fa-play" aria-hidden="true"></i> Listen
             </button>
-            <button class="like-btn ${song.favorite ? 'liked' : ''}" data-id="${song.id}" aria-label="${song.favorite ? 'Remove from' : 'Add to'} favorites">
-              <i class="fas fa-heart" aria-hidden="true"></i>
-            </button>
+            <div>
+              <button class="queue-btn" data-id="${song.id}" aria-label="Add to queue">
+                <i class="fas fa-plus" aria-hidden="true"></i>
+              </button>
+              <button class="like-btn ${song.favorite ? 'liked' : ''}" data-id="${song.id}" aria-label="${song.favorite ? 'Remove from' : 'Add to'} favorites">
+                <i class="fas fa-heart" aria-hidden="true"></i>
+              </button>
+              <button class="info-btn" data-id="${song.id}" aria-label="Song details">
+                <i class="fas fa-info-circle" aria-hidden="true"></i>
+              </button>
+            </div>
           </div>
         `;
         
         gallery.appendChild(card);
       });
       
-      // Add event listeners to like buttons
+      // Add event listeners to buttons
       document.querySelectorAll('.like-btn').forEach(button => {
         button.addEventListener('click', toggleFavorite);
       });
       
-      // Add event listeners to play buttons
       document.querySelectorAll('.play-btn').forEach(button => {
         button.addEventListener('click', playSong);
+      });
+
+      document.querySelectorAll('.queue-btn').forEach(button => {
+        button.addEventListener('click', addToQueue);
+      });
+
+      document.querySelectorAll('.info-btn').forEach(button => {
+        button.addEventListener('click', showSongDetails);
       });
     }
 
@@ -924,13 +1350,20 @@
           button.classList.add('playing');
           button.innerHTML = '<i class="fas fa-pause" aria-hidden="true"></i> Playing';
         }
+
+        // Update queue
+        currentQueueIndex = playQueue.findIndex(s => s.id === song.id);
+        updateQueueDisplay();
       }
     }
 
     // Toggle play/pause
     function togglePlayPause() {
       if (audio.paused) {
-        audio.play();
+        audio.play().catch(e => {
+          console.error("Error playing audio:", e);
+          handleAudioError();
+        });
         isPlaying = true;
         playPauseIcon.classList.remove('fa-play');
         playPauseIcon.classList.add('fa-pause');
@@ -940,6 +1373,104 @@
         playPauseIcon.classList.remove('fa-pause');
         playPauseIcon.classList.add('fa-play');
       }
+    }
+
+    // Play previous song
+    function playPrevious() {
+      if (playQueue.length === 0) return;
+      
+      if (isShuffled) {
+        currentQueueIndex = Math.floor(Math.random() * playQueue.length);
+      } else {
+        currentQueueIndex = (currentQueueIndex - 1 + playQueue.length) % playQueue.length;
+      }
+      
+      const song = playQueue[currentQueueIndex];
+      if (song) {
+        playSongById(song.id);
+      }
+    }
+
+    // Play next song
+    function playNext() {
+      if (playQueue.length === 0) return;
+      
+      if (isShuffled) {
+        currentQueueIndex = Math.floor(Math.random() * playQueue.length);
+      } else {
+        currentQueueIndex = (currentQueueIndex + 1) % playQueue.length;
+      }
+      
+      const song = playQueue[currentQueueIndex];
+      if (song) {
+        playSongById(song.id);
+      }
+    }
+
+    // Play song by ID
+    function playSongById(id) {
+      const song = animeSongs.find(s => s.id === id);
+      if (song) {
+        playerTitle.textContent = `${song.song} - ${song.title}`;
+        playerArtist.textContent = song.artist;
+        audio.src = song.audio;
+        currentSong = song.id;
+        
+        audio.play().catch(e => {
+          console.error("Error playing audio:", e);
+          handleAudioError();
+        });
+        isPlaying = true;
+        playPauseIcon.classList.remove('fa-play');
+        playPauseIcon.classList.add('fa-pause');
+        
+        // Update play button on card to show it's playing
+        document.querySelectorAll('.play-btn').forEach(btn => {
+          btn.classList.remove('playing');
+          btn.innerHTML = '<i class="fas fa-play" aria-hidden="true"></i> Listen';
+        });
+        
+        const playingBtn = document.querySelector(`.play-btn[data-id="${id}"]`);
+        if (playingBtn) {
+          playingBtn.classList.add('playing');
+          playingBtn.innerHTML = '<i class="fas fa-pause" aria-hidden="true"></i> Playing';
+        }
+        
+        updateQueueDisplay();
+      }
+    }
+
+    // Toggle shuffle
+    function toggleShuffle() {
+      isShuffled = !isShuffled;
+      shuffleBtn.classList.toggle('active', isShuffled);
+    }
+
+    // Toggle repeat
+    function toggleRepeat() {
+      isRepeating = !isRepeating;
+      repeatBtn.classList.toggle('active', isRepeating);
+    }
+
+    // Handle song end
+    function handleSongEnd() {
+      if (isRepeating) {
+        audio.currentTime = 0;
+        audio.play().catch(e => {
+          console.error("Error playing audio:", e);
+          handleAudioError();
+        });
+      } else {
+        playNext();
+      }
+    }
+
+    // Handle audio error
+    function handleAudioError() {
+      alert('Error loading audio file. Please try another song.');
+      isPlaying = false;
+      playPauseIcon.classList.remove('fa-pause');
+      playPauseIcon.classList.add('fa-play');
     }
 
     // Update progress bar
@@ -959,6 +1490,11 @@
       audio.currentTime = (clickX / width) * duration;
     }
 
+    // Set volume
+    function setVolume() {
+      audio.volume = volumeSlider.value / 100;
+    }
+
     // Format time in mm:ss
     function formatTime(seconds) {
       if (isNaN(seconds)) return '0:00';
@@ -972,8 +1508,9 @@
     function filterSongs() {
       const searchTerm = searchInput.value.toLowerCase();
       const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+      const sortBy = sortSelect.value;
       
-      const filteredSongs = animeSongs.filter(song => {
+      let filteredSongs = animeSongs.filter(song => {
         const matchesSearch = song.title.toLowerCase().includes(searchTerm) || 
                              song.song.toLowerCase().includes(searchTerm) ||
                              (song.artist && song.artist.toLowerCase().includes(searchTerm));
@@ -983,6 +1520,22 @@
                             (activeFilter === song.type);
         
         return matchesSearch && matchesFilter;
+      });
+      
+      // Sort the filtered songs
+      filteredSongs.sort((a, b) => {
+        switch(sortBy) {
+          case 'title':
+            return a.title.localeCompare(b.title);
+          case 'song':
+            return a.song.localeCompare(b.song);
+          case 'artist':
+            return (a.artist || '').localeCompare(b.artist || '');
+          case 'year':
+            return b.year - a.year;
+          default:
+            return 0;
+        }
       });
       
       displaySongs(filteredSongs);
@@ -998,6 +1551,7 @@
         song.favorite = !song.favorite;
         button.classList.toggle('liked');
         button.setAttribute('aria-label', `${song.favorite ? 'Remove from' : 'Add to'} favorites`);
+        saveFavorites();
         updateStats();
         
         // If we're on the favorites filter, update the display
@@ -1006,6 +1560,170 @@
           filterSongs();
         }
       }
+    }
+
+    // Add song to queue
+    function addToQueue(event) {
+      const button = event.currentTarget;
+      const id = parseInt(button.dataset.id);
+      const song = animeSongs.find(s => s.id === id);
+      
+      if (song && !playQueue.some(s => s.id === id)) {
+        playQueue.push(song);
+        button.classList.add('queued');
+        button.innerHTML = '<i class="fas fa-check" aria-hidden="true"></i>';
+        
+        setTimeout(() => {
+          button.classList.remove('queued');
+          button.innerHTML = '<i class="fas fa-plus" aria-hidden="true"></i>';
+        }, 1000);
+        
+        updateQueueDisplay();
+      }
+    }
+
+    // Update queue display
+    function updateQueueDisplay() {
+      queueList.innerHTML = '';
+      
+      if (playQueue.length === 0) {
+        queueList.innerHTML = '<li style="text-align: center; padding: 20px; color: var(--gray);">Queue is empty</li>';
+        return;
+      }
+      
+      playQueue.forEach((song, index) => {
+        const queueItem = document.createElement('li');
+        queueItem.className = `queue-item ${index === currentQueueIndex ? 'active' : ''}`;
+        queueItem.innerHTML = `
+          <img src="${song.image}" alt="${song.title} cover" class="queue-item-img" onerror="this.style.display='none'">
+          <div class="queue-item-info">
+            <div class="queue-item-title">${song.song}</div>
+            <div class="queue-item-artist">${song.artist} • ${song.title}</div>
+          </div>
+          <button class="queue-remove" data-index="${index}" aria-label="Remove from queue">
+            <i class="fas fa-times"></i>
+          </button>
+        `;
+        
+        queueItem.addEventListener('click', (e) => {
+          if (!e.target.closest('.queue-remove')) {
+            currentQueueIndex = index;
+            playSongById(song.id);
+          }
+        });
+        
+        const removeBtn = queueItem.querySelector('.queue-remove');
+        removeBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          removeFromQueue(index);
+        });
+        
+        queueList.appendChild(queueItem);
+      });
+    }
+
+    // Remove song from queue
+    function removeFromQueue(index) {
+      playQueue.splice(index, 1);
+      
+      if (currentQueueIndex === index) {
+        currentQueueIndex = -1;
+        if (playQueue.length > 0) {
+          currentQueueIndex = 0;
+          playSongById(playQueue[0].id);
+        } else {
+          audio.pause();
+          isPlaying = false;
+          playPauseIcon.classList.remove('fa-pause');
+          playPauseIcon.classList.add('fa-play');
+        }
+      } else if (currentQueueIndex > index) {
+        currentQueueIndex--;
+      }
+      
+      updateQueueDisplay();
+    }
+
+    // Show song details modal
+    function showSongDetails(event) {
+      const button = event.currentTarget;
+      const id = parseInt(button.dataset.id);
+      const song = animeSongs.find(s => s.id === id);
+      
+      if (song) {
+        modalImage.src = song.image;
+        modalImage.alt = `${song.title} cover`;
+        modalTitle.textContent = `${song.song} - ${song.title}`;
+        modalInfo.innerHTML = `
+          <p><strong>Artist:</strong> ${song.artist}</p>
+          <p><strong>Anime:</strong> ${song.title}</p>
+          <p><strong>Type:</strong> ${song.type === 'opening' ? 'Opening Theme' : 'Ending Theme'}</p>
+          <p><strong>Released:</strong> ${song.year}</p>
+        `;
+        lyricsContent.textContent = song.lyrics || "Lyrics not available for this song.";
+        
+        songModal.classList.add('active');
+      }
+    }
+
+    // Toggle theme
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+      const icon = themeToggle.querySelector('i');
+      if (document.body.classList.contains('dark-mode')) {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+      } else {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+      }
+    }
+
+    // Toggle queue panel
+    function toggleQueuePanel() {
+      queuePanel.classList.toggle('active');
+    }
+
+    // Save favorites to localStorage
+    function saveFavorites() {
+      const favorites = animeSongs.filter(song => song.favorite).map(song => song.id);
+      localStorage.setItem('animeFavorites', JSON.stringify(favorites));
+    }
+
+    // Load favorites from localStorage
+    function loadFavorites() {
+      const favorites = JSON.parse(localStorage.getItem('animeFavorites') || '[]');
+      animeSongs.forEach(song => {
+        song.favorite = favorites.includes(song.id);
+      });
+    }
+
+    // Export favorites
+    function exportFavorites() {
+      const favorites = animeSongs.filter(song => song.favorite);
+      const data = JSON.stringify(favorites, null, 2);
+      downloadFile(data, 'anime-favorites.json', 'application/json');
+    }
+
+    // Export queue
+    function exportQueue() {
+      const data = JSON.stringify(playQueue, null, 2);
+      downloadFile(data, 'anime-queue.json', 'application/json');
+    }
+
+    // Download file helper
+    function downloadFile(data, filename, type) {
+      const file = new Blob([data], {type: type});
+      const a = document.createElement('a');
+      const url = URL.createObjectURL(file);
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      }, 0);
     }
 
     // Update statistics
@@ -1017,6 +1735,26 @@
       totalSongsElement.textContent = totalSongs;
       totalAnimeElement.textContent = totalAnime;
       favoriteCountElement.textContent = favoriteCount;
+    }
+
+    // Handle keyboard shortcuts
+    function handleKeyboardShortcuts(e) {
+      // Space bar to play/pause (when not focused on input elements)
+      if (e.code === 'Space' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        togglePlayPause();
+      }
+      
+      // Arrow keys for seeking (when audio player is visible)
+      if (!audioPlayer.classList.contains('hidden')) {
+        if (e.code === 'ArrowRight') {
+          e.preventDefault();
+          audio.currentTime = Math.min(audio.duration, audio.currentTime + 10);
+        } else if (e.code === 'ArrowLeft') {
+          e.preventDefault();
+          audio.currentTime = Math.max(0, audio.currentTime - 10);
+        }
+      }
     }
 
     // Initialize the application
